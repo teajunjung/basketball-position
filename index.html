@@ -117,11 +117,19 @@
 
   <!-- 메인 인터랙티브 영역 (코트 화면) -->
   <main class="court-container">
-    <!-- 상단 상태 안내 배너 -->
+    <!-- 상단 상태 안내 배너 (문제) -->
     <div id="instructionBanner" class="instruction-banner">
       <div class="banner-badge" id="currentQuizBadge">Quiz 1</div>
       <div class="banner-text" id="currentQuizTitle">
         공격수를 클릭하여 퀴즈를 시작하세요!
+      </div>
+    </div>
+
+    <!-- 상황 및 수비 안내 카드 (문제 바로 밑, 코트 위로 배치) -->
+    <div id="helperCard" class="situation-helper-card">
+      <div class="helper-content">
+        <h4 id="helperTitle">수비 상황 안내</h4>
+        <p id="helperText">농구공을 든 빨간색 공격수를 막으려면 어디에 서야 할까요? <strong>공격자</strong>를 눌러 퀴즈를 시작해 보세요!</p>
       </div>
     </div>
 
@@ -358,14 +366,6 @@
       </div>
     </div>
 
-    <!-- 하단 설명/도움말 카드 -->
-    <div class="bottom-helper-card">
-      <div class="helper-avatar">🐻</div>
-      <div class="helper-content">
-        <h4 id="helperTitle">코치 곰돌이의 안내</h4>
-        <p id="helperText">농구공을 든 빨간색 공격수를 막으려면 어디에 서야 할까요? <strong>공격자</strong>를 눌러 퀴즈를 시작해 보세요!</p>
-      </div>
-    </div>
   </main>
 
   <!-- 정답/오답 토스트 알림 (중간 피드백) -->

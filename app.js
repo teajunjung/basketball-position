@@ -1125,8 +1125,8 @@ document.addEventListener('DOMContentLoaded', () => {
     currentQuizBadge.innerText = '📋 자유 전술판';
     currentQuizTitle.innerHTML = '<span class="highlight">1:1부터 5:5까지 직접 배치하고 발자국 방향을 돌려보세요!</span>';
 
-    helperTitle.innerText = '코치 곰돌이의 자유 전술판';
-    helperText.innerHTML = '선수를 드래그해 옮기고, <strong>화살표 끝의 ↻ 손잡이를 돌려 발자국 방향을 회전</strong>할 수 있어요! <strong>공격수를 클릭하면 패스</strong>됩니다.';
+    helperTitle.innerText = '자유 전술판 도움말';
+    helperText.innerHTML = '선수를 드래그해 자유롭게 배치하고, <strong>마우스 휠이나 하단 회전 버튼으로 발자국 방향을 조절</strong>해 보세요! <strong>공격수를 클릭하면 패스</strong>됩니다.';
 
     // 기본 2대2 로드
     loadMatchSize(2);
@@ -1691,8 +1691,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (courtQuizBadge) courtQuizBadge.innerText = `[${modeNames[currentMode]}] Q${q.id}, ${q.shortName}`;
     if (courtQuizTitle) courtQuizTitle.innerText = `${q.title}: 어디에 발을 딛고 서야 할까요?`;
 
-    helperTitle.innerText = `코치 곰돌이의 안내 (${modeNames[currentMode]} - ${q.id}/${qList.length})`;
-    helperText.innerHTML = `${q.situationDesc} 빨간색 공격자의 공을 주시하며 올바른 파란색 발자국을 골라보세요!`;
+    helperTitle.innerText = `수비 상황 안내 (${modeNames[currentMode]} - ${q.id}/${qList.length})`;
+    helperText.innerHTML = `${q.situationDesc} 빨간색 공격자의 공을 주시하며 올바른 발자국을 골라보세요!`;
 
     updateNavState();
   }
@@ -1725,8 +1725,8 @@ document.addEventListener('DOMContentLoaded', () => {
       currentQuizTitle.innerHTML = `수비수의 발자국은 어디에 서야 할까요? <span class="highlight">A, B, C 발자국 중 하나를 골라보세요!</span>`;
     }
 
-    helperTitle.innerText = `코치 곰돌이의 발자국 힌트`;
-    helperText.innerHTML = "공과 동료 선수들의 위치를 고려해 가장 안전하고 효과적인 <strong>보라색 발자국(A, B, C)</strong>을 골라보세요!";
+    helperTitle.innerText = `수비 발자국 선택 힌트`;
+    helperText.innerHTML = "공과 동료 선수들의 위치를 고려해 가장 효과적인 <strong>보라색 발자국(A, B, C)</strong>을 골라보세요!";
   }
 
   // ================= 9. 최상단 단일 툴팁 & 선택지 클릭 (A, B, C) =================
@@ -1810,7 +1810,7 @@ document.addEventListener('DOMContentLoaded', () => {
       feedbackDesc.innerText = selected.feedbackDesc;
       feedbackToast.classList.remove('hidden');
 
-      helperTitle.innerText = "코치 곰돌이의 칭찬 👏";
+      helperTitle.innerText = "수비 성공! 👏";
       helperText.innerHTML = `대단해요! 멋진 팀 수비 위치를 찾았어요. (${solvedQuizzes[currentMode].size}/${qList.length}개 완료)`;
     } else {
       sfx.playWrong();
@@ -1821,7 +1821,7 @@ document.addEventListener('DOMContentLoaded', () => {
       feedbackDesc.innerText = selected.feedbackDesc;
       feedbackToast.classList.remove('hidden');
 
-      helperTitle.innerText = "코치 곰돌이의 피드백 🐻";
+      helperTitle.innerText = "수비 피드백 💡";
       helperText.innerHTML = "아쉬워요! 올바른 발 모양과 팀 수비 원리를 확인해 볼까요?";
     }
 

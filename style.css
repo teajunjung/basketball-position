@@ -853,44 +853,39 @@ body {
   transition: transform 0.35s ease;
 }
 
-/* ================= 하단 코치 안내 카드 ================= */
-.bottom-helper-card {
+/* ================= 수비 상황 안내 카드 (문제 밑, 코트 위 배치) ================= */
+.situation-helper-card {
   width: 100%;
-  margin-top: 12px;
+  margin-bottom: 10px;
   background: #ffffff;
-  border-radius: var(--border-radius-md);
-  padding: 12px 16px;
+  border-radius: 14px;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
-  gap: 14px;
-  box-shadow: var(--box-shadow);
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.08);
+  border: 1.5px solid #fed7aa;
+  border-left: 5px solid #ea580c;
+  transition: all 0.25s ease;
 }
 
-.helper-avatar {
-  font-size: 2.2rem;
-  background: #fef3c7;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 2px solid #fde68a;
+.situation-helper-card .helper-content {
+  width: 100%;
 }
 
-.helper-content h4 {
+.situation-helper-card .helper-content h4 {
+  font-family: 'Jua', sans-serif;
   font-size: 0.95rem;
   color: #ea580c;
   font-weight: 700;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
+  letter-spacing: -0.2px;
 }
 
-.helper-content p {
+.situation-helper-card .helper-content p {
   font-size: 0.88rem;
   color: #334155;
-  line-height: 1.45;
+  line-height: 1.48;
+  word-break: keep-all;
 }
 
 /* ================= 농구코트 하단 일체형 문제 카드 (두 번째 첨부파일 스타일) ================= */
