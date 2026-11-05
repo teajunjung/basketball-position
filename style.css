@@ -152,12 +152,13 @@ body {
   background: transparent;
   border: 2px solid transparent;
   border-radius: 12px;
-  padding: 6px 3px;
+  padding: 8px 4px 7px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  justify-content: center;
+  gap: 4px;
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -180,15 +181,12 @@ body {
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
 }
 
-.mode-tab-btn .tab-emoji {
-  font-size: 1.15rem;
-}
-
 .mode-tab-btn .tab-label {
   font-family: 'Jua', sans-serif;
-  font-size: 0.88rem;
+  font-size: 0.94rem;
   color: #334155;
   white-space: nowrap;
+  letter-spacing: -0.2px;
 }
 
 .mode-tab-btn.active .tab-label {
@@ -196,12 +194,12 @@ body {
 }
 
 .mode-tab-btn .tab-badge {
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   background: #f1f5f9;
   color: #64748b;
   font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 8px;
+  padding: 2px 7px;
+  border-radius: 9999px;
   white-space: nowrap;
 }
 
