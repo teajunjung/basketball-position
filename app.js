@@ -1552,7 +1552,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       g.setAttribute('class', 'teammate-marker');
-      g.setAttribute('transform', `translate(${p.x}, ${p.y})`);
+      g.setAttribute('transform', `translate(${p.x}, ${p.y}) scale(0.74)`);
 
       // 1. 회색 바탕 동그라미 베이스 (r: 30으로 넉넉하게 확장)
       const baseCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -1597,12 +1597,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 3. 미니 이름 태그 (동그라미 안 숫자는 모두 제거하고 하단 태그만 깔끔하게 표시)
       const tagG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      tagG.setAttribute('transform', 'translate(0, 26)');
+      tagG.setAttribute('transform', 'translate(0, 24)');
 
       const tagRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      tagRect.setAttribute('x', '-34');
+      tagRect.setAttribute('x', '-32');
       tagRect.setAttribute('y', '0');
-      tagRect.setAttribute('width', '68');
+      tagRect.setAttribute('width', '64');
       tagRect.setAttribute('height', '16');
       tagRect.setAttribute('rx', '8');
       tagRect.setAttribute('fill', labelBg);
@@ -1615,7 +1615,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tagText.setAttribute('y', '11.5');
       tagText.setAttribute('text-anchor', 'middle');
       tagText.setAttribute('fill', '#ffffff');
-      tagText.setAttribute('font-size', '9.5');
+      tagText.setAttribute('font-size', '10.5');
       tagText.setAttribute('font-weight', 'bold');
       tagText.setAttribute('font-family', "'Noto Sans KR'");
       tagText.textContent = p.name;
@@ -1640,7 +1640,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderOtherPlayers(q.otherPlayers);
 
     // 공격자 마커 위치 및 빨간색 발자국 각도
-    attackerMarker.setAttribute('transform', `translate(${q.attacker.x}, ${q.attacker.y})`);
+    attackerMarker.setAttribute('transform', `translate(${q.attacker.x}, ${q.attacker.y}) scale(0.74)`);
     if (attackerFeetGroup) {
       attackerFeetGroup.setAttribute('transform', `rotate(${q.attacker.angle || 0})`);
     }
@@ -1660,7 +1660,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const rotEl = document.getElementById(`candRot${key}`);
 
       if (markerEl && choiceData) {
-        markerEl.setAttribute('transform', `translate(${choiceData.x}, ${choiceData.y})`);
+        markerEl.setAttribute('transform', `translate(${choiceData.x}, ${choiceData.y}) scale(0.74)`);
         markerEl.classList.remove('highlight-correct');
       }
       if (rotEl && choiceData) {
@@ -1750,11 +1750,12 @@ document.addEventListener('DOMContentLoaded', () => {
     topTooltipText.setAttribute('y', '5.5');
 
     // 마커가 코트 우측(x >= 330)에 있으면 툴팁을 마커 왼쪽에 띄워 오른쪽에 위치한 마커/공격수에 가려지지 않음!
+    const tipOffset = 38;
     if (choiceData.x >= 330) {
-      topTooltipLayer.setAttribute('transform', `translate(${choiceData.x - boxWidth - 48}, ${choiceData.y})`);
+      topTooltipLayer.setAttribute('transform', `translate(${choiceData.x - boxWidth - tipOffset}, ${choiceData.y})`);
       topTooltipArrow.setAttribute('points', `${boxWidth},-7 ${boxWidth},7 ${boxWidth + 8},0`);
     } else {
-      topTooltipLayer.setAttribute('transform', `translate(${choiceData.x + 48}, ${choiceData.y})`);
+      topTooltipLayer.setAttribute('transform', `translate(${choiceData.x + tipOffset}, ${choiceData.y})`);
       topTooltipArrow.setAttribute('points', '-8,0 0,-7 0,7');
     }
 
