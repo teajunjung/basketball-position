@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>농구 기초 수비 마스터! 🏀 - 1:1 / 2:2 / 3:3 / 5:5 수비 교실</title>
+  <title>농구 명당 찾기 🏀</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -15,16 +15,16 @@
     <div class="logo-group">
       <div class="basketball-icon-spin">🏀</div>
       <div>
-        <h1 class="main-title">농구 수비 탐험대 <span>팀 수비 확장판</span></h1>
+        <h1 class="main-title">농구 명당 찾기</h1>
         <p class="sub-title">1대1부터 2대2, 3대3, 5대5까지! 단계별 수비 명당 찾기</p>
       </div>
     </div>
     <div class="header-actions">
-      <button id="soundToggleBtn" class="pill-btn sound-btn" title="효과음 켜기/끄기">
-        <span class="icon">🔊</span> <span class="label">소리 켜짐</span>
+      <button id="defenseModeBtn" class="pill-btn role-btn defense-btn active" title="수비 모드">
+        <span class="label">수비</span>
       </button>
-      <button id="resetAppBtn" class="pill-btn restart-btn" title="처음부터 다시하기">
-        <span class="icon">🔄</span> <span class="label">처음으로</span>
+      <button id="offenseModeBtn" class="pill-btn role-btn offense-btn" title="공격 모드">
+        <span class="label">공격</span>
       </button>
     </div>
   </header>
@@ -34,19 +34,19 @@
     <div class="mode-tabs-wrapper">
       <button class="mode-tab-btn active" data-mode="1v1">
         <span class="tab-label">1대1 기초</span>
-        <span class="tab-badge">10문제</span>
+        <span class="tab-badge" id="badge_1v1">20문제</span>
       </button>
       <button class="mode-tab-btn" data-mode="2v2">
         <span class="tab-label">2대2 팀워크</span>
-        <span class="tab-badge">5문제</span>
+        <span class="tab-badge" id="badge_2v2">20문제</span>
       </button>
       <button class="mode-tab-btn" data-mode="3v3">
         <span class="tab-label">3대3 반코트</span>
-        <span class="tab-badge">5문제</span>
+        <span class="tab-badge" id="badge_3v3">20문제</span>
       </button>
       <button class="mode-tab-btn" data-mode="5v5">
         <span class="tab-label">5대5 정규전</span>
-        <span class="tab-badge">10문제</span>
+        <span class="tab-badge" id="badge_5v5">20문제</span>
       </button>
       <button class="mode-tab-btn board-tab-btn" data-mode="board">
         <span class="tab-label">자유 전술판</span>
@@ -117,20 +117,16 @@
 
   <!-- 메인 인터랙티브 영역 (코트 화면) -->
   <main class="court-container">
-    <!-- 상단 상태 안내 배너 (문제) -->
-    <div id="instructionBanner" class="instruction-banner">
-      <div class="banner-badge" id="currentQuizBadge">Quiz 1</div>
-      <div class="banner-text" id="currentQuizTitle">
-        공격수를 클릭하여 퀴즈를 시작하세요!
+    <!-- 통합 퀴즈 안내 & 상황 브리핑 카드 (단일 일체형 카드) -->
+    <div id="instructionBanner" class="unified-quiz-card">
+      <div class="card-header-row">
+        <span class="card-badge" id="currentQuizBadge">1대1 - Q1</span>
+        <span class="card-title" id="currentQuizTitle">공격수를 클릭하여 퀴즈를 시작하세요!</span>
       </div>
-    </div>
-
-    <!-- 상황 및 수비 안내 카드 (문제 바로 밑, 코트 위로 배치) -->
-    <div id="helperCard" class="situation-helper-card">
-      <div class="helper-content">
-        <h4 id="helperTitle">수비 상황 안내</h4>
-        <p id="helperText">농구공을 든 빨간색 공격수를 막으려면 어디에 서야 할까요? <strong>공격자</strong>를 눌러 퀴즈를 시작해 보세요!</p>
-      </div>
+      <p class="card-desc" id="helperText">
+        농구공을 든 빨간색 공격수를 막으려면 어디에 서야 할까요? <strong>공격자</strong>를 눌러 퀴즈를 시작해 보세요!
+      </p>
+      <span id="helperTitle" style="display:none;"></span>
     </div>
 
     <!-- 2D 농구 코트 SVG 평면도 -->
@@ -241,83 +237,88 @@
         <g id="defenseCandidatesGroup" class="defense-candidates hidden">
           
           <!-- 후보 A (선택할 수비수 후보: 눈에 확 띄는 보라색 바이올렛 테마) -->
-          <g id="candidateA" class="candidate-marker feet-marker candidate-purple" transform="translate(300, 360) scale(0.74)" data-choice="A">
-            <circle class="cand-zone-circle" cx="0" cy="0" r="38" fill="#e2e8f0" stroke="#a855f7" stroke-width="2.6" />
+          <g id="candidateA" class="candidate-marker feet-marker candidate-purple" transform="translate(300, 360)" data-choice="A">
+            <circle class="cand-zone-circle" cx="0" cy="0" r="28" fill="#e2e8f0" stroke="#a855f7" stroke-width="2.6" />
             
             <g id="candRotA" class="feet-rotate-group" transform="rotate(180)">
-              <line x1="0" y1="-26" x2="0" y2="-50" stroke="#7c3aed" stroke-width="3" stroke-dasharray="4 2" marker-end="url(#dirArrowPurple)"/>
-              <g transform="translate(-16, 0)"><use href="#shoeSoleLeft" fill="#7c3aed"/></g>
-              <g transform="translate(16, 0)"><use href="#shoeSoleRight" fill="#7c3aed"/></g>
+              <line x1="0" y1="-18" x2="0" y2="-36" stroke="#7c3aed" stroke-width="2.8" stroke-dasharray="3 2" marker-end="url(#dirArrowPurple)"/>
+              <g transform="translate(-11, 0) scale(0.68)"><use href="#shoeSoleLeft" fill="#7c3aed"/></g>
+              <g transform="translate(11, 0) scale(0.68)"><use href="#shoeSoleRight" fill="#7c3aed"/></g>
             </g>
 
-            <!-- A 뱃지 (보라색 바탕 + 선명한 황금빛 글자) -->
+            <!-- A 뱃지 (보라색 바탕 + 선명하고 큼직한 황금빛 글자) -->
             <g class="feet-badge-group">
-              <circle cx="0" cy="0" r="14" fill="#581c87" stroke="#ffffff" stroke-width="2.2" filter="url(#badgeShadow)" />
-              <text class="feet-letter" x="0" y="5.5" text-anchor="middle" fill="#fbbf24" font-size="16" font-family="'Jua', sans-serif">A</text>
+              <circle cx="0" cy="0" r="13" fill="#581c87" stroke="#ffffff" stroke-width="2" filter="url(#badgeShadow)" />
+              <text class="feet-letter" x="0" y="5.5" text-anchor="middle" fill="#fbbf24" font-size="16" font-weight="900" font-family="'Jua', sans-serif">A</text>
             </g>
           </g>
 
           <!-- 후보 B -->
-          <g id="candidateB" class="candidate-marker feet-marker candidate-purple" transform="translate(300, 415) scale(0.74)" data-choice="B">
-            <circle class="cand-zone-circle" cx="0" cy="0" r="38" fill="#e2e8f0" stroke="#a855f7" stroke-width="2.6" />
+          <g id="candidateB" class="candidate-marker feet-marker candidate-purple" transform="translate(300, 415)" data-choice="B">
+            <circle class="cand-zone-circle" cx="0" cy="0" r="28" fill="#e2e8f0" stroke="#a855f7" stroke-width="2.6" />
             
             <g id="candRotB" class="feet-rotate-group" transform="rotate(180)">
-              <line x1="0" y1="-26" x2="0" y2="-50" stroke="#7c3aed" stroke-width="3" stroke-dasharray="4 2" marker-end="url(#dirArrowPurple)"/>
-              <g transform="translate(-16, 0)"><use href="#shoeSoleLeft" fill="#7c3aed"/></g>
-              <g transform="translate(16, 0)"><use href="#shoeSoleRight" fill="#7c3aed"/></g>
+              <line x1="0" y1="-18" x2="0" y2="-36" stroke="#7c3aed" stroke-width="2.8" stroke-dasharray="3 2" marker-end="url(#dirArrowPurple)"/>
+              <g transform="translate(-11, 0) scale(0.68)"><use href="#shoeSoleLeft" fill="#7c3aed"/></g>
+              <g transform="translate(11, 0) scale(0.68)"><use href="#shoeSoleRight" fill="#7c3aed"/></g>
             </g>
 
             <!-- B 뱃지 -->
             <g class="feet-badge-group">
-              <circle cx="0" cy="0" r="14" fill="#581c87" stroke="#ffffff" stroke-width="2.2" filter="url(#badgeShadow)" />
-              <text class="feet-letter" x="0" y="5.5" text-anchor="middle" fill="#fbbf24" font-size="16" font-family="'Jua', sans-serif">B</text>
+              <circle cx="0" cy="0" r="13" fill="#581c87" stroke="#ffffff" stroke-width="2" filter="url(#badgeShadow)" />
+              <text class="feet-letter" x="0" y="5.5" text-anchor="middle" fill="#fbbf24" font-size="16" font-weight="900" font-family="'Jua', sans-serif">B</text>
             </g>
           </g>
 
           <!-- 후보 C -->
-          <g id="candidateC" class="candidate-marker feet-marker candidate-purple" transform="translate(300, 240) scale(0.74)" data-choice="C">
-            <circle class="cand-zone-circle" cx="0" cy="0" r="38" fill="#e2e8f0" stroke="#a855f7" stroke-width="2.6" />
+          <g id="candidateC" class="candidate-marker feet-marker candidate-purple" transform="translate(300, 240)" data-choice="C">
+            <circle class="cand-zone-circle" cx="0" cy="0" r="28" fill="#e2e8f0" stroke="#a855f7" stroke-width="2.6" />
             
             <g id="candRotC" class="feet-rotate-group" transform="rotate(180)">
-              <line x1="0" y1="-26" x2="0" y2="-50" stroke="#7c3aed" stroke-width="3" stroke-dasharray="4 2" marker-end="url(#dirArrowPurple)"/>
-              <g transform="translate(-16, 0)"><use href="#shoeSoleLeft" fill="#7c3aed"/></g>
-              <g transform="translate(16, 0)"><use href="#shoeSoleRight" fill="#7c3aed"/></g>
+              <line x1="0" y1="-18" x2="0" y2="-36" stroke="#7c3aed" stroke-width="2.8" stroke-dasharray="3 2" marker-end="url(#dirArrowPurple)"/>
+              <g transform="translate(-11, 0) scale(0.68)"><use href="#shoeSoleLeft" fill="#7c3aed"/></g>
+              <g transform="translate(11, 0) scale(0.68)"><use href="#shoeSoleRight" fill="#7c3aed"/></g>
             </g>
 
             <!-- C 뱃지 -->
             <g class="feet-badge-group">
-              <circle cx="0" cy="0" r="14" fill="#581c87" stroke="#ffffff" stroke-width="2.2" filter="url(#badgeShadow)" />
-              <text class="feet-letter" x="0" y="5.5" text-anchor="middle" fill="#fbbf24" font-size="16" font-family="'Jua', sans-serif">C</text>
+              <circle cx="0" cy="0" r="13" fill="#581c87" stroke="#ffffff" stroke-width="2" filter="url(#badgeShadow)" />
+              <text class="feet-letter" x="0" y="5.5" text-anchor="middle" fill="#fbbf24" font-size="16" font-weight="900" font-family="'Jua', sans-serif">C</text>
             </g>
           </g>
         </g>
 
-        <!-- ================= 메인 공격자 마커 (회색 동그라미 + 농구공 뱃지 + 화살표) ================= -->
-        <g id="attackerMarker" class="attacker-group clickable" transform="translate(300, 470) scale(0.74)">
-          <circle class="cand-zone-circle attacker-zone-circle" cx="0" cy="0" r="35" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2.5" />
+        <!-- ================= 메인 공격자 마커 (도형은 슬림하게 축소, 글씨는 큼직하게 유지) ================= -->
+        <g id="attackerMarker" class="attacker-group clickable" transform="translate(300, 470)">
+          <!-- 도형 축소: r=26 -->
+          <circle class="cand-zone-circle attacker-zone-circle" cx="0" cy="0" r="26" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2.5" />
 
+          <!-- 발자국 축소: scale 0.66 -->
           <g id="attackerFeetGroup" transform="rotate(0)">
-            <line x1="0" y1="-20" x2="0" y2="-40" stroke="#ef4444" stroke-width="3" stroke-dasharray="4 2" marker-end="url(#dirArrowRed)"/>
-            <g transform="translate(-15, 0)"><use href="#shoeSoleLeft" fill="#ef4444"/></g>
-            <g transform="translate(15, 0)"><use href="#shoeSoleRight" fill="#ef4444"/></g>
+            <line x1="0" y1="-15" x2="0" y2="-32" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="3 2" marker-end="url(#dirArrowRed)"/>
+            <g transform="translate(-10, 0) scale(0.66)"><use href="#shoeSoleLeft" fill="#ef4444"/></g>
+            <g transform="translate(10, 0) scale(0.66)"><use href="#shoeSoleRight" fill="#ef4444"/></g>
           </g>
 
+          <!-- 농구공 뱃지 축소: r=11 -->
           <g class="attacker-ball-badge" transform="translate(0, 0)">
-            <circle cx="0" cy="0" r="14" fill="#f97316" stroke="#ffffff" stroke-width="2" filter="url(#badgeShadow)" />
-            <path d="M -14 0 C -4 -4 4 -4 14 0" stroke="#7c2d12" stroke-width="1.3" fill="none"/>
-            <path d="M 0 -14 C 4 -4 4 4 0 14" stroke="#7c2d12" stroke-width="1.3" fill="none"/>
-            <path d="M -10 -10 L 10 10" stroke="#7c2d12" stroke-width="1.1" fill="none"/>
+            <circle cx="0" cy="0" r="11" fill="#f97316" stroke="#ffffff" stroke-width="1.8" filter="url(#badgeShadow)" />
+            <path d="M -11 0 C -3 -3 3 -3 11 0" stroke="#7c2d12" stroke-width="1.2" fill="none"/>
+            <path d="M 0 -11 C 3 -3 3 3 0 11" stroke="#7c2d12" stroke-width="1.2" fill="none"/>
+            <path d="M -7 -7 L 7 7" stroke="#7c2d12" stroke-width="1.0" fill="none"/>
           </g>
 
-          <g id="attackerLabelGroup" transform="translate(0, 32)">
-            <rect id="attackerLabelRect" x="-46" y="0" width="92" height="20" rx="10" fill="#b91c1c" stroke="#ffffff" stroke-width="1.2"/>
-            <text id="attackerLabelText" x="0" y="14" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="bold" font-family="'Noto Sans KR'">공격자 (공 소유)</text>
+          <!-- 공격자 하단 라벨 (글씨는 다시 큼직하게! 12px) -->
+          <g id="attackerLabelGroup" transform="translate(0, 28)">
+            <rect id="attackerLabelRect" x="-50" y="0" width="100" height="22" rx="11" fill="#b91c1c" stroke="#ffffff" stroke-width="1.2"/>
+            <text id="attackerLabelText" x="0" y="15" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold" font-family="'Noto Sans KR'">공격자 (공 소유)</text>
           </g>
 
-          <g id="clickMeBubble" class="click-bubble" transform="translate(0, -64)">
-            <rect x="-65" y="-14" width="130" height="28" rx="14" fill="#ffb703" stroke="#ffffff" stroke-width="2" filter="url(#softGlow)"/>
+          <!-- 클릭 유도 말풍선 (글씨 큼직하게! 12.5px 900) -->
+          <g id="clickMeBubble" class="click-bubble" transform="translate(0, -48)">
+            <rect x="-66" y="-14" width="132" height="28" rx="14" fill="#ffb703" stroke="#ffffff" stroke-width="2" filter="url(#softGlow)"/>
             <polygon points="-6,14 6,14 0,22" fill="#ffb703"/>
-            <text x="0" y="4" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="900" font-family="'Noto Sans KR'">👆 저를 클릭해보세요!</text>
+            <text x="0" y="4" text-anchor="middle" fill="#0f172a" font-size="12.5" font-weight="900" font-family="'Noto Sans KR'">👆 저를 클릭해보세요!</text>
           </g>
         </g>
 
@@ -334,6 +335,19 @@
           </g>
           <!-- 드래그 가능한 선수들이 동적 렌더링되는 그룹 -->
           <g id="boardPlayersGroup"></g>
+          <!-- 마우스로 직접 잡아서 다른 선수에게 패스하거나 코트 어디든 자유롭게 놓을 수 있는 독립 농구공 -->
+          <g id="boardBallElement" class="draggable-ball" transform="translate(300, 460)" cursor="grab" title="농구공을 잡고 코트 어디든 자유롭게 놓거나, 선수에게 드래그해 패스하세요!">
+            <!-- 넉넉한 클릭 히트박스 (반경 22) -->
+            <circle class="ball-hitbox" cx="0" cy="0" r="22" fill="rgba(0,0,0,0.001)" />
+            <!-- 호버/드래그 가이드 글로우 링 -->
+            <circle class="ball-glow-ring" cx="0" cy="0" r="18" fill="none" stroke="#f97316" stroke-width="2.5" stroke-dasharray="4 2" opacity="0" />
+            <!-- 농구공 본체 (r=13) -->
+            <circle class="ball-body" cx="0" cy="0" r="13" fill="#f97316" stroke="#ffffff" stroke-width="2.2" filter="url(#badgeShadow)" />
+            <!-- 농구공 가죽 솔기 라인 -->
+            <path d="M -13 0 C -3 -3 3 -3 13 0" stroke="#7c2d12" stroke-width="1.3" fill="none" pointer-events="none"/>
+            <path d="M 0 -13 C 3 -3 3 3 0 13" stroke="#7c2d12" stroke-width="1.3" fill="none" pointer-events="none"/>
+            <path d="M -9 -9 L 9 9" stroke="#7c2d12" stroke-width="1.1" fill="none" pointer-events="none"/>
+          </g>
         </g>
 
         <!-- ================= 최상단 단일 플로팅 툴팁 레이어 (어떤 마커나 그래픽보다 항상 맨 위에 노출) ================= -->
@@ -344,38 +358,20 @@
         </g>
       </svg>
 
-      <!-- 농구코트 하단 일체형 문제 카드 (별도 팝업창 없이 농구코트에 직접 표시) -->
-      <div id="courtBottomQuizCard" class="court-bottom-quiz-card hidden">
-        <!-- 1. 먼저 나오는 문구: 상황 설명 ("빨간색 공격수가...") -->
-        <div class="court-quiz-desc" id="courtQuizDesc">빨간색 공격수가 정면 3점 라인 밖에서 골대를 향해 서 있어요!</div>
-        <!-- 2. 그 다음 나오는 문구: 문제 (뱃지 + 질문) -->
-        <div class="court-quiz-question-row">
-          <span class="court-quiz-badge" id="courtQuizBadge">[1대1] Q1. 정면 3점</span>
-          <h3 class="court-quiz-title" id="courtQuizTitle">어디에 발을 딛고 서야 할까요?</h3>
-        </div>
+      <!-- 자유 전술판 전용 회전 툴바 (보이지 않는 상태로 보관) -->
+      <div id="boardRotationToolbar" class="board-rotation-toolbar hidden" style="display:none !important;"></div>
 
-        <!-- 3. 자유 전술판 전용: 선택 선수 발자국 방향 조절 툴바 -->
-        <div id="boardRotationToolbar" class="board-rotation-toolbar hidden">
-          <span class="rotate-tool-label" id="rotateTargetLabel">선택: 🏀 공 가진 #7</span>
-          <div class="rotate-tool-btns">
-            <button id="rotateLeftBtn" class="rot-btn" title="왼쪽으로 30도 돌리기">↺ 좌 30°</button>
-            <button id="rotateRightBtn" class="rot-btn" title="오른쪽으로 30도 돌리기">↻ 우 30°</button>
-            <button id="rotateFaceRimBtn" class="rot-btn btn-accent" title="골대 방향 바라보기">🎯 골대 정면</button>
-          </div>
+      <!-- 정답/오답 코트 정중앙 팝업 알림 (문제 풀었을 때 코트 가운데에서 떴다가 사라짐) -->
+      <div id="feedbackToast" class="feedback-toast hidden">
+        <div id="feedbackIcon" class="feedback-icon">🎉</div>
+        <div class="feedback-content">
+          <h3 id="feedbackTitle">정답이에요! 참 잘했어요!</h3>
+          <p id="feedbackDesc">골대와 공격자 사이에서 팔 하나 거리를 유지해야 슛과 돌파를 모두 막을 수 있어요.</p>
         </div>
       </div>
     </div>
 
   </main>
-
-  <!-- 정답/오답 토스트 알림 (중간 피드백) -->
-  <div id="feedbackToast" class="feedback-toast hidden">
-    <div id="feedbackIcon" class="feedback-icon">🎉</div>
-    <div class="feedback-content">
-      <h3 id="feedbackTitle">정답이에요! 참 잘했어요!</h3>
-      <p id="feedbackDesc">골대와 공격자 사이에서 팔 하나 거리를 유지해야 슛과 돌파를 모두 막을 수 있어요.</p>
-    </div>
-  </div>
 
   <!-- 2차 팝업 (상세 가이드 모달) -->
   <div id="guideModal" class="guide-modal-backdrop hidden">
@@ -383,20 +379,61 @@
       <button id="closeModalBtn" class="modal-close-btn" title="닫기">&times;</button>
       
       <div class="modal-header">
-        <span class="modal-tag" id="modalTag">🏀 핵심 수비 비법 전수</span>
-        <h2 class="modal-main-title" id="modalMainTitle">완벽한 수비 위치 & 기본 자세 (디펜스 스탠스)</h2>
-        <p class="modal-subtitle" id="modalSubtitle">발 모양과 시선 처리를 기억하면 오늘부터 나도 최고의 수비왕!</p>
+        <div class="modal-header-top-row">
+          <span class="modal-tag" id="modalTag">🏀 핵심 전술 비법 전수</span>
+          <!-- 상단 탭 전환: [문제 전술 해설] vs [기본 수비 자세] -->
+          <div class="modal-view-toggle">
+            <button id="viewTacticsTabBtn" class="modal-toggle-tab active" title="이번 문제의 전술 개념과 수비 비법 보기">📖 문제 전술 해설</button>
+            <button id="viewStanceTabBtn" class="modal-toggle-tab" title="수비 대장 호비의 기본 디펜스 스탠스 자세 보기">🥋 기본 수비 자세 보기</button>
+          </div>
+        </div>
+        <h2 class="modal-main-title" id="modalMainTitle">완벽한 수비 위치 & 전술 비법</h2>
+        <p class="modal-subtitle" id="modalSubtitle">공격 전술의 원리와 수비 명당 비법을 한눈에 배워보세요!</p>
       </div>
 
-      <div class="modal-body-grid">
+      <!-- 1. [이번 문제 맞춤형 전술 해설 뷰] (기본 화면) -->
+      <div id="modalTacticsView" class="modal-body-grid tactics-grid">
+        <!-- 왼쪽 카드: 공격 전술 개념 설명 (포스트업, 윙, 픽앤롤 등 공격 원리) -->
+        <div class="tactics-concept-card">
+          <div class="tactics-card-badge badge-orange">🏀 공격 전술 개념 쏙쏙 이해하기</div>
+          <h3 class="tactics-card-title" id="tacticsConceptTitle">공격 기술 개념</h3>
+          <p class="tactics-card-desc" id="tacticsConceptDesc">
+            공격수가 사용하는 전술과 움직임의 원리를 설명합니다.
+          </p>
+          <div class="tactics-key-point-box danger-box">
+            <div class="point-item">
+              <span class="point-icon">⚠️</span>
+              <div class="point-text" id="tacticsDangerPoint"><strong>위험 포인트:</strong> 상대의 핵심 득점 루트를 주의하세요!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오른쪽 카드: 수비 대장의 명당 수비 비법 -->
+        <div class="tactics-defense-card">
+          <div class="tactics-card-badge badge-blue">🛡️ 수비 대장의 명당 비법</div>
+          <h3 class="tactics-card-title" id="tacticsDefenseTitle">어떻게 막아야 할까요?</h3>
+          <p class="tactics-card-desc" id="tacticsDefenseDesc">
+            올바른 위치 선정과 발자국 각도, 거리 조절 비법을 설명합니다.
+          </p>
+          <div class="tactics-key-point-box defense-box">
+            <div class="point-item">
+              <span class="point-icon">💡</span>
+              <div class="point-text" id="tacticsSecretPoint"><strong>명당 수비 공식:</strong> 골대-공격수 일직선 차단 & 팔 하나 거리 확보!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. [기본 수비 자세 화면 (디펜스 스탠스)] (상단 버튼 클릭 시 노출) -->
+      <div id="modalStanceView" class="modal-body-grid stance-grid hidden">
         <!-- 왼쪽 카드: [정면 뷰] 3D 수비 대장 호비의 기본 디펜스 스탠스 -->
         <div class="defense-character-card">
           <div class="character-img-wrapper">
             <img src="./assets/hobi_front_defense.jpg" alt="수비 대장 호비의 기본 디펜스 스탠스 정면" class="guide-render-img" />
             <!-- 교육용 인터랙티브 플로팅 뱃지 -->
-            <div class="cg-callout callout-top-right">✋ 슛 방어!</div>
-            <div class="cg-callout callout-mid-left">🖐️ 패스·드리블 견제</div>
-            <div class="cg-callout callout-mid-center">👀 시선은 상대 배꼽!</div>
+            <div class="cg-callout callout-high-hand">✋ 슛 방어!</div>
+            <div class="cg-callout callout-eye-right">👀 시선은 상대 배꼽!</div>
+            <div class="cg-callout callout-low-hand">🖐️ 패스·드리블 견제</div>
             <div class="cg-callout callout-bottom">👟 발은 어깨너비 1.5배 & 무릎 굽히기!</div>
           </div>
           <div class="character-caption">
